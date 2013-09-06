@@ -40,15 +40,32 @@ var logger = new(winston.Logger)({
     exceptionHandlers: [new winston.transports.File({filename: './log/exceptions.log'})]    
 });  
 
+global.logger = logger; 
 
 app.get('/', routes.index);
 
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
+  logger.info('star_coordinator started');
 });
 
 
 //Internal
 app.get('/internal/commands', routes.connectionHandler.command_get_cb);
 app.post('/internal/command_responses', routes.connectionHandler.commandResponse_post_cb); 
+
+
+//var globalConnectionMgr = require('./global_connection_mgr.js');
+//setInterval(function(){
+//  var commandParameters = {
+//      para1: "hello",
+//      paraTest2: "test"
+//  };
+//              
+//  globalConnectionMgr.sendRequestToRemote( "story_cam_server_Gance_PC", { command: "CONNECTION_TEST", parameters: commandParameters }, function(responseParameters) {
+//      console.log('responseParameters=');
+//      console.dir(responseParameters);
+//  });
+//}, 4000);
+

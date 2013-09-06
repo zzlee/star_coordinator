@@ -21,6 +21,7 @@ FM.globalConnectionMgr = (function(){
                 delete connectedRemotes[remoteID];
             },
             
+            //TODO: need to open RESTful API "GET /internal/connected_remotes" to star_server for this
             getConnectedRemotes: function(type){
                 var result = new Array();
                 //console.log('total connections');
@@ -49,6 +50,7 @@ FM.globalConnectionMgr = (function(){
                 }
             },
             
+            //TODO: need to open RESTful API "POST /internal/requests_to_remote/:reqIdString" to star_server for this
             sendRequestToRemote: function( targetedRemoteID, reqToRemote, cb ) {
                 connectionHandler.sendRequestToRemote( targetedRemoteID, reqToRemote, cb );
             }
