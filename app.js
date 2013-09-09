@@ -9,6 +9,7 @@ var http = require('http');
 var path = require('path');
 var fs = require('fs');
 var winston = require('winston');
+var globalConnectionMgr = require('./global_connection_mgr.js');
 
 var app = express();
 
