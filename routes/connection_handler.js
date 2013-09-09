@@ -81,4 +81,29 @@ connectionHandler.command_get_cb = function(req, res) {
 
 };
 
+//GET /internal/connected_remotes
+connectionHandler.cbOfGetConnectedRemotes = function(req, res) {
+    if (req.query.type) {
+        var connectedRemotes = globalConnectionMgr.getConnectedRemotes(req.query.type);
+        res.send(200, {connectedRemotes: connectedRemotes});
+    }
+    else {
+        res.send(400, "Parameters are incorrect or wrong.");
+    }
+    
+};
+
+//POST /internal/requests_to_remote/:reqIdString
+connectionHandler.cbOfPostRequestsToRemote = function(req, res) {
+    
+    if (req.params.reqIdString && req.body.targetedRemoteID) {
+        globalConnectionMgr.sendRequestToRemote(req.body.targetedRemoteID, req.params.reqIdString, function(responseParameters){
+            res.send(200, {responseParameters: responseParameters});
+        });
+    }
+    else {
+        res.send(400, "Parameters are incorrect or wrong.");
+    }
+};
+
 module.exports = connectionHandler;

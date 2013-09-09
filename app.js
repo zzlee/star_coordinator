@@ -56,6 +56,11 @@ http.createServer(app).listen(app.get('port'), function(){
 app.get('/internal/commands', routes.connectionHandler.command_get_cb);
 app.post('/internal/command_responses', routes.connectionHandler.commandResponse_post_cb); 
 
+//GET /internal/connected_remotes
+app.get('/internal/connected_remotes', routes.connectionHandler.cbOfGetConnectedRemotes);
+
+//POST /internal/requests_to_remote/:reqIdString
+app.post('/internal/requests_to_remote/:reqIdString', routes.connectionHandler.cbOfPostRequestsToRemote);
 
 //var globalConnectionMgr = require('./global_connection_mgr.js');
 //setInterval(function(){
