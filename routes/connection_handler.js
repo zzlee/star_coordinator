@@ -31,8 +31,8 @@ connectionHandler.sendRequestToRemote = function( targetID, reqToRemote, cb ) {
 //POST /internal/command_responses
 connectionHandler.commandResponse_post_cb = function(req, res) {
 
-	var commandID = req.body._command_id;
-	var remoteID = req.body._remote_id;
+	var commandID = req.body._commandId;
+	var remoteID = req.body._remoteId;
 	var responseParameters = req.body;
 
 	eventEmitter.emit('RESPONSE_'+commandID, responseParameters);
@@ -45,8 +45,8 @@ connectionHandler.commandResponse_post_cb = function(req, res) {
 
 //GET /internal/commands
 connectionHandler.command_get_cb = function(req, res) {
-	logger.info('['+ new Date() +']Got long-polling from remote: '+ req.query.remote_id );
-	//console.log('['+ new Date() +']Got long-polling HTTP request from remote: '+ req.query.remote_id )
+	logger.info('['+ new Date() +']Got long-polling from remote: '+ req.query.remoteId );
+	//console.log('['+ new Date() +']Got long-polling HTTP request from remote: '+ req.query.remoteId )
 	//console.dir(req);
 	
 	
@@ -58,34 +58,40 @@ connectionHandler.command_get_cb = function(req, res) {
 		messageToRemote.type = "COMMAND";
 		messageToRemote.body = reqToRemote;
 		res.send(messageToRemote);
-		globalConnectionMgr.removeConnection(req.query.remote_id);
+		globalConnectionMgr.removeConnection(req.query.remoteId);
 	};
 	
-	globalConnectionMgr.addConnection(req.query.remote_id, req.query.remote_type);
+	globalConnectionMgr.addConnection(req.query.remoteId, req.query.remoteType, req.query.remoteLoad);
 
 	var timer = setTimeout(function(){ 
-		eventEmitter.removeListener('COMMAND_'+req.query.remote_id, callback);
+		eventEmitter.removeListener('COMMAND_'+req.query.remoteId, callback);
 		messageToRemote.type = "LONG_POLLING_TIMEOUT";
 		messageToRemote.body = null;
 		res.send(messageToRemote);
-		globalConnectionMgr.removeConnection(req.query.remote_id);
+		globalConnectionMgr.removeConnection(req.query.remoteId);
 	}, 60000);	
 	//}, 5000);	
 	
-	eventEmitter.once('COMMAND_'+req.query.remote_id, callback);	
-	if ( requestsToRemote[req.query.remote_id] ) {
-        if ( requestsToRemote[req.query.remote_id].length > 0 ){
-            eventEmitter.emit('COMMAND_'+req.query.remote_id, requestsToRemote[req.query.remote_id].shift());
+	eventEmitter.once('COMMAND_'+req.query.remoteId, callback);	
+	if ( requestsToRemote[req.query.remoteId] ) {
+        if ( requestsToRemote[req.query.remoteId].length > 0 ){
+            eventEmitter.emit('COMMAND_'+req.query.remoteId, requestsToRemote[req.query.remoteId].shift());
         }
 	}
 
 };
 
-//GET /internal/connected_remotes
-connectionHandler.cbOfGetConnectedRemotes = function(req, res) {
+//GET /internal/connected_remote_with_lowest_load
+connectionHandler.cbOfGetConnectedRemoteWithLowestLoad = function(req, res) {
     if (req.query.type) {
-        var connectedRemotes = globalConnectionMgr.getConnectedRemotes(req.query.type);
-        res.send(200, {connectedRemotes: connectedRemotes});
+        var connectedRemotes = globalConnectionMgr.getConnectedRemoteWithLowestLoad(req.query.type, function(err, result){
+            if (!err){
+                res.send(200, {connectedRemoteWithLowestLoad: result});
+            }
+            else {
+                res.send(500, {error: "Failed to get the connected remote with the lowest load: "+err});
+            }
+        });
     }
     else {
         res.send(400, "Parameters are incorrect or wrong.");

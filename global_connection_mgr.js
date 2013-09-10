@@ -11,9 +11,9 @@ FM.globalConnectionMgr = (function(){
     function constructor(){
         //the methods exposed to public
         var _this = {
-            addConnection: function(remoteID, type){
+            addConnection: function(remoteID, type, load){
                 //console.log('%s is connected! [type=%s]', remoteID, type);
-                connectedRemotes[remoteID] = type;
+                connectedRemotes[remoteID] = {type: type, load: load};
             },
             
             removeConnection: function(remoteID){
@@ -21,26 +21,46 @@ FM.globalConnectionMgr = (function(){
                 delete connectedRemotes[remoteID];
             },
             
-            //TODO: need to open RESTful API "GET /internal/connected_remotes" to star_server for this
-            getConnectedRemotes: function(type){
-                var result = new Array();
-                //console.log('total connections');
-                
+//            getConnectedRemotes: function(type){ //deprecated
+//                var result = new Array();
+//                //console.log('total connections');
+//                
+//                for (anId in connectedRemotes){
+//                    //console.log('%s %s', anId, connectedRemotes[anId]);
+//                    if (type){
+//                        if (connectedRemotes[anId]==type){
+//                            result.push(anId);
+//                        }                        
+//                    }
+//                    else { //push all the items in connectedRemotes
+//                        result.push(anId);
+//                    }
+//                }
+//                
+//                return result;
+//            },
+
+            getConnectedRemoteWithLowestLoad: function(type, cbOfGetConnectedRemoteWithLowestLoad){
                 for (anId in connectedRemotes){
+                    var lowestLoadIndex = 1000000;
+                    var connectedRemoteWithLowestLoad = null;
                     //console.log('%s %s', anId, connectedRemotes[anId]);
                     if (type){
-                        if (connectedRemotes[anId]==type){
-                            result.push(anId);
+                        if (connectedRemotes[anId].type==type){
+                            if (connectedRemotes[anId].load < lowestLoadIndex ) {
+                                lowestLoadIndex = connectedRemotes[anId].load;
+                                connectedRemoteWithLowestLoad = anId;
+                            }
                         }                        
                     }
-                    else { //push all the items in connectedRemotes
-                        result.push(anId);
+                    else { 
+                        cbOfGetConnectedRemoteWithLowestLoad('Parameter "type" is not specified.', null);
                     }
                 }
                 
-                return result;
+                cbOfGetConnectedRemoteWithLowestLoad(null, connectedRemoteWithLowestLoad);
             },
-            
+
             isConnectedTo: function(remoteID){
                 if (  connectedRemotes[remoteID] ){
                     return true;
@@ -50,7 +70,6 @@ FM.globalConnectionMgr = (function(){
                 }
             },
             
-            //TODO: need to open RESTful API "POST /internal/requests_to_remote/:reqIdString" to star_server for this
             sendRequestToRemote: function( targetedRemoteID, reqToRemote, cb ) {
                 connectionHandler.sendRequestToRemote( targetedRemoteID, reqToRemote, cb );
             }
