@@ -59,8 +59,8 @@ app.post('/internal/command_responses', routes.connectionHandler.commandResponse
 //GET /internal/connected_remotes
 app.get('/internal/connected_remote_with_lowest_load', routes.connectionHandler.cbOfGetConnectedRemoteWithLowestLoad);
 
-//POST /internal/requests_to_remote/:reqIdString
-app.post('/internal/requests_to_remote/:reqIdString', routes.connectionHandler.cbOfPostRequestsToRemote);
+//POST /internal/requests_to_remote
+app.post('/internal/requests_to_remote', routes.connectionHandler.cbOfPostRequestsToRemote);
 
 //var globalConnectionMgr = require('./global_connection_mgr.js');
 //setInterval(function(){

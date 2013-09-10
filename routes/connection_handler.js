@@ -99,11 +99,11 @@ connectionHandler.cbOfGetConnectedRemoteWithLowestLoad = function(req, res) {
     
 };
 
-//POST /internal/requests_to_remote/:reqIdString
+//POST /internal/requests_to_remote
 connectionHandler.cbOfPostRequestsToRemote = function(req, res) {
-    
-    if (req.params.reqIdString && req.body.targetedRemoteID) {
-        globalConnectionMgr.sendRequestToRemote(req.body.targetedRemoteID, req.params.reqIdString, function(responseParameters){
+    debugger;
+    if (req.body.targetedRemoteID && req.body.reqToRemote ) {
+        globalConnectionMgr.sendRequestToRemote(req.body.targetedRemoteID, req.body.reqToRemote, function(responseParameters){
             res.send(200, {responseParameters: responseParameters});
         });
     }
