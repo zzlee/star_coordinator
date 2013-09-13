@@ -21,24 +21,6 @@ FM.globalConnectionMgr = (function(){
                 delete connectedRemotes[remoteID];
             },
             
-//            getConnectedRemotes: function(type){ //deprecated
-//                var result = new Array();
-//                //console.log('total connections');
-//                
-//                for (anId in connectedRemotes){
-//                    //console.log('%s %s', anId, connectedRemotes[anId]);
-//                    if (type){
-//                        if (connectedRemotes[anId]==type){
-//                            result.push(anId);
-//                        }                        
-//                    }
-//                    else { //push all the items in connectedRemotes
-//                        result.push(anId);
-//                    }
-//                }
-//                
-//                return result;
-//            },
 
             getConnectedRemoteWithLowestLoad: function(type, cbOfGetConnectedRemoteWithLowestLoad){
                 for (anId in connectedRemotes){

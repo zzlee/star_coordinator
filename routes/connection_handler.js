@@ -23,9 +23,12 @@ connectionHandler.sendRequestToRemote = function( targetID, reqToRemote, cb ) {
     if ( globalConnectionMgr.isConnectedTo(targetID) ){
         eventEmitter.emit('COMMAND_'+targetID, requestsToRemote[targetID].shift());
     }
-    
-    
+        
     eventEmitter.once('RESPONSE_'+reqToRemote._commandID, cb);
+        
+    logger.info('Send command ' + reqToRemote._commandID + ' to ' + targetID + ' :' );
+    logger.info(JSON.stringify(reqToRemote));
+    logger.info('Registered the respondse ' + 'RESPONSE_'+reqToRemote._commandID );
 };
 
 //POST /internal/command_responses
@@ -36,7 +39,7 @@ connectionHandler.commandResponse_post_cb = function(req, res) {
 	var responseParameters = req.body;
 
 	eventEmitter.emit('RESPONSE_'+commandID, responseParameters);
-	logger.info('Got response ' + commandID + ' from ' + remoteID + ' :' );
+	logger.info('Got response of ' + commandID + ' from ' + remoteID + ' :' );
 	logger.info(JSON.stringify(responseParameters));
 	
 	res.send(200);
@@ -49,6 +52,7 @@ connectionHandler.command_get_cb = function(req, res) {
 	//console.log('['+ new Date() +']Got long-polling HTTP request from remote: '+ req.query.remoteId )
 	//console.dir(req);
 	
+	req.connection.setTimeout(60*60*1000);
 	
 	var messageToRemote = new Object();
 	
@@ -101,7 +105,9 @@ connectionHandler.cbOfGetConnectedRemoteWithLowestLoad = function(req, res) {
 
 //POST /internal/requests_to_remote
 connectionHandler.cbOfPostRequestsToRemote = function(req, res) {
-    debugger;
+
+    req.connection.setTimeout(60*60*1000);
+    
     if (req.body.targetedRemoteID && req.body.reqToRemote ) {
         globalConnectionMgr.sendRequestToRemote(req.body.targetedRemoteID, req.body.reqToRemote, function(responseParameters){
             res.send(200, {responseParameters: responseParameters});

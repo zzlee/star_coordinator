@@ -65,11 +65,15 @@ app.post('/internal/requests_to_remote', routes.connectionHandler.cbOfPostReques
 //var globalConnectionMgr = require('./global_connection_mgr.js');
 //setInterval(function(){
 //  var commandParameters = {
-//      para1: "hello",
+//      para1: "hello_from_star_coordinator",
 //      paraTest2: "test"
 //  };
 //              
 //  globalConnectionMgr.sendRequestToRemote( "story_cam_server_Gance_PC", { command: "CONNECTION_TEST", parameters: commandParameters }, function(responseParameters) {
+//      console.log('responseParameters=');
+//      console.dir(responseParameters);
+//  });
+//  globalConnectionMgr.sendRequestToRemote( "AE_Server_Gance_PC", { command: "CONNECTION_TEST", parameters: commandParameters }, function(responseParameters) {
 //      console.log('responseParameters=');
 //      console.dir(responseParameters);
 //  });
