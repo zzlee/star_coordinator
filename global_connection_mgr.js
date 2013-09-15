@@ -53,6 +53,7 @@ FM.globalConnectionMgr = (function(){
             },
             
             sendRequestToRemote: function( targetedRemoteID, reqToRemote, cb ) {
+			logger.info('[sendRequestToRemote] targetedRemoteID='+targetedRemoteID+',reqToRemote='+JSON.stringify(reqToRemote));
                 connectionHandler.sendRequestToRemote( targetedRemoteID, reqToRemote, cb );
             }
             
