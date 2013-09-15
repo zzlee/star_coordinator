@@ -14,7 +14,7 @@ var globalConnectionMgr = require('./global_connection_mgr.js');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 80);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -61,6 +61,9 @@ app.get('/internal/connected_remote_with_lowest_load', routes.connectionHandler.
 
 //POST /internal/requests_to_remote
 app.post('/internal/requests_to_remote', routes.connectionHandler.cbOfPostRequestsToRemote);
+
+//POST /internal/send_message_to_mobile_by_remote
+app.post('/internal/send_message_to_mobile_by_remote', routes.connectionHandler.cbOfPostSendMessageToMobileByRemote);
 
 //var globalConnectionMgr = require('./global_connection_mgr.js');
 //setInterval(function(){

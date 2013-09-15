@@ -3,6 +3,7 @@ var connectionHandler = {};
 var events = require("events");
 var eventEmitter = new events.EventEmitter();
 var globalConnectionMgr;
+var smsMgr = require("../sms_mgr.js");
 
 var requestsToRemote = new Object();
 
@@ -111,6 +112,24 @@ connectionHandler.cbOfPostRequestsToRemote = function(req, res) {
     if (req.body.targetedRemoteID && req.body.reqToRemote ) {
         globalConnectionMgr.sendRequestToRemote(req.body.targetedRemoteID, req.body.reqToRemote, function(responseParameters){
             res.send(200, {responseParameters: responseParameters});
+        });
+    }
+    else {
+        res.send(400, "Parameters are incorrect or wrong.");
+    }
+};
+
+//POST /internal/send_message_to_mobile_by_remote
+connectionHandler.cbOfPostSendMessageToMobileByRemote = function(req, res) {
+
+    if (req.body.phoneNum && req.body.code ) {
+        smsMgr.sendMessageToMobile(req.body.phoneNum, req.body.code, function(err, result){
+            if (err){
+                res.send(401, {message:"ÊÖ™CÕJ×C´a°lËÍÊ§”¡"});
+            }
+            else{
+                res.send(200, {message:"ÊÖ™CÕJ×C´aÒÑ°lËÍ"});
+            }
         });
     }
     else {
