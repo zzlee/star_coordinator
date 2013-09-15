@@ -62,6 +62,9 @@ app.get('/internal/connected_remote_with_lowest_load', routes.connectionHandler.
 //POST /internal/requests_to_remote
 app.post('/internal/requests_to_remote', routes.connectionHandler.cbOfPostRequestsToRemote);
 
+//GET /internal/ugc_serial_no
+app.post('/internal/ugc_serial_no', routes.genericHandler.cbOfGetUgcSerialNo);
+
 //var globalConnectionMgr = require('./global_connection_mgr.js');
 //setInterval(function(){
 //  var commandParameters = {
