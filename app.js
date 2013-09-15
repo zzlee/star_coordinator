@@ -76,6 +76,9 @@ async.waterfall([
         //GET /internal/ugc_serial_no
         app.get('/internal/ugc_serial_no', routes.genericHandler.cbOfGetUgcSerialNo);
         
+        //POST /internal/send_message_to_mobile_by_remote
+        app.post('/internal/send_message_to_mobile_by_remote', routes.connectionHandler.cbOfPostSendMessageToMobileByRemote);
+        
         http.createServer(app).listen(app.get('port'), function(){
             //console.log('Express server listening on port ' + app.get('port'));
             //logger.info('star_coordinator started');
@@ -114,9 +117,3 @@ async.waterfall([
         console.log('app.js initializes with errors: '+err);
     }
 });
-
-
-
-
-
-
