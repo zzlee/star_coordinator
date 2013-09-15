@@ -1,31 +1,49 @@
-var ugcSerialNoMgr = {}; 
-
-var db = require('./db.js');
-var ugcModel = db.getDocModel("ugc");
-
-
-var ugcSerialNo = 0;
-
-ugcSerialNoMgr.init = function(cbOfInit) {
+var ugcSerialNoMgr = (function(){
+    var uInstance = null;
     
-    ugcModel.findOne().sort({no: -1}).exec( function(err, doc) {
-        if (!err) {
-            ugcSerialNo =  doc.no;
-            cbOfInit(null);
+    function constructor(){
+        var db = require('./db.js');
+        var ugcModel = db.getDocModel("ugc");
+
+        var ugcSerialNo = 0;
+
+        return {
+            //-- public services --
+            init: function(cbOfInit) {
+                
+                ugcModel.findOne().sort({no: -1}).exec( function(err, doc) {
+                    if (!err) {
+                        ugcSerialNo =  doc.no;
+                        cbOfInit(null);
+                    }
+                    else {
+                        cbOfInit("Fail to get maximum no of UGC: "+ err);
+                    }        
+                });
+            },
+
+            getUgcSerialNo: function() {
+                ugcSerialNo++;
+                return ugcSerialNo;
+            }
+        };
+    }
+    
+    
+    return {
+        getInstance: function(){
+            if(!uInstance){
+                uInstance = constructor();
+            }
+            
+            return uInstance;
         }
-        else {
-            cbOfInit("Fail to get maximum no of UGC: "+ err);
-        }        
-    });
-};
+    };
+})();
 
 
-ugcSerialNoMgr.getUgcSerialNo = function() {
-    ugcSerialNo++;
-    return ugcSerialNo;
-};
-
-//ugcSerialNoMgr.init();
 
 
-module.exports = ugcSerialNoMgr;
+
+
+module.exports = ugcSerialNoMgr.getInstance();
