@@ -16,7 +16,7 @@ var ugcSerialNoMgr = require('./ugc_serial_no_mgr.js');
 var app = express();
 
 // all environments
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 80);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
@@ -74,19 +74,21 @@ async.waterfall([
         app.post('/internal/requests_to_remote', routes.connectionHandler.cbOfPostRequestsToRemote);
         
         //GET /internal/ugc_serial_no
-        app.post('/internal/ugc_serial_no', routes.genericHandler.cbOfGetUgcSerialNo);
+        app.get('/internal/ugc_serial_no', routes.genericHandler.cbOfGetUgcSerialNo);
         
         http.createServer(app).listen(app.get('port'), function(){
-            console.log('Express server listening on port ' + app.get('port'));
-            logger.info('star_coordinator started');
+            //console.log('Express server listening on port ' + app.get('port'));
+            //logger.info('star_coordinator started');
             callback(null);
         });
     },
     function(callback){
         //test
-        setInterval(function(){
-            console.log('no='+ugcSerialNoMgr.getUgcSerialNo());
-        }, 4000);
+//        setInterval(function(){
+//            ugcSerialNoMgr.getUgcSerialNo(function(err, ugcSerialNo){
+//                console.log('no='+ugcSerialNo);
+//            });
+//        }, 4000);
         
 //        var globalConnectionMgr = require('./global_connection_mgr.js');
 //        setInterval(function(){

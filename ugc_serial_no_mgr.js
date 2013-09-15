@@ -22,9 +22,9 @@ var ugcSerialNoMgr = (function(){
                 });
             },
 
-            getUgcSerialNo: function() {
+            getUgcSerialNo: function(cbOfGetUgcSerialNo) {
                 ugcSerialNo++;
-                return ugcSerialNo;
+                cbOfGetUgcSerialNo(null, ugcSerialNo);
             }
         };
     }
