@@ -80,8 +80,8 @@ async.waterfall([
         app.post('/internal/send_message_to_mobile_by_remote', routes.connectionHandler.cbOfPostSendMessageToMobileByRemote);
         
         http.createServer(app).listen(app.get('port'), function(){
-            //console.log('Express server listening on port ' + app.get('port'));
-            //logger.info('star_coordinator started');
+            console.log('Express server listening on port ' + app.get('port'));
+            logger.info('star_coordinator started');
             callback(null);
         });
     },
