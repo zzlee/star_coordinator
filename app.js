@@ -1,3 +1,9 @@
+var systemConfig = require('./system_configuration.js').getInstance();
+if ( systemConfig.HOST_MONGO_DB_SERVER_URL===undefined ) {
+	console.log("ERROR: system_configuration.json is not properly filled!");
+	process.exit(1);
+}
+global.systemConfig = systemConfig;
 
 /**
  * Module dependencies.
