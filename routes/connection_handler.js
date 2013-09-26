@@ -1,4 +1,4 @@
-var connectionHandler = {};
+ï»¿var connectionHandler = {};
 
 var events = require("events");
 var eventEmitter = new events.EventEmitter();
@@ -121,14 +121,16 @@ connectionHandler.cbOfPostRequestsToRemote = function(req, res) {
 
 //POST /internal/send_message_to_mobile_by_remote
 connectionHandler.cbOfPostSendMessageToMobileByRemote = function(req, res) {
-
+	logger.info('Send code ' + req.body.code + ' to ' + req.body.phoneNum + 'start');
     if (req.body.phoneNum && req.body.code ) {
         smsMgr.sendMessageToMobile(req.body.phoneNum, req.body.code, function(err, result){
             if (err){
-                res.send(401, {message:"ÊÖ™CÕJ×C´a°lËÍÊ§”¡"});
+			    logger.info('Send code ' + req.body.code + ' to ' + req.body.phoneNum + ' err:'+ err);
+                res.send(401, {message:"æ‰‹æ©Ÿèªè­‰ç¢¼ç™¼é€å¤±æ•—"});
             }
             else{
-                res.send(200, {message:"ÊÖ™CÕJ×C´aÒÑ°lËÍ"});
+				logger.info('Send code ' + req.body.code + ' to ' + req.body.phoneNum + ' result:'+ result);
+                res.send(200, {message:"æ‰‹æ©Ÿèªè­‰ç¢¼å·²ç™¼é€"});
             }
         });
     }
