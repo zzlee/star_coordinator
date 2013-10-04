@@ -37,7 +37,7 @@ FM.smsMgr = (function(){
               var sourceProdID = 'feltmeng';
               var sourceMsgID = Math.random()*10000;
               var password = md5(memberID+':'+memberpassword+':'+sourceProdID+':'+sourceMsgID);
-              var charSet = 'B';
+              var charSet = 'U';
               
              /**
               *  request ex:
@@ -51,7 +51,7 @@ FM.smsMgr = (function(){
                 +"&SourceProdID="+sourceProdID
                 +"&SourceMsgID="+sourceMsgID
                 +"&CharSet="+charSet
-                +"&SMSMessage="+smsMessage;
+                +"&SMSMessage=上大螢幕認證碼"+smsMessage+"，你將登上大螢幕!";
                 
                 request({
                     method: 'GET',
