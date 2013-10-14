@@ -11,8 +11,8 @@ FM.smsMgr = (function(){
     var md5 = require('MD5');
     
     var mobile_url = 'http://www.yoyo8.com.tw/SMSBridge.php';
-    var memberID = 'gabrisl';
-    var memberpassword = '53768608';
+    var memberID = 'feltmeng';
+    var memberpassword = '1234';
 
     
     function constructor(){
