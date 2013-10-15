@@ -13,7 +13,10 @@ var ugcSerialNoMgr = (function(){
                 
                 ugcModel.findOne().sort({no: -1}).exec( function(err, doc) {
                     if (!err) {
-                        ugcSerialNo =  doc.no;
+                    	if (doc) {
+                            ugcSerialNo =  doc.no;
+                    	}
+
                         cbOfInit(null);
                     }
                     else {
